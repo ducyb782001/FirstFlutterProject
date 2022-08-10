@@ -82,3 +82,14 @@ Column buildColumn() {
     ],
   );
 }
+
+// Part 2:
+
+class CounterTextWidget extends StatelessWidget {
+  int counter = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text('Tui la widget text. Data cua tui la $counter');
+  }
+}
