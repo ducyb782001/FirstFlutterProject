@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -19,10 +21,14 @@ class MyAppStatefull extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
-  // When a widget is created and running, there are 3 functions that we may concern
-  // 1. init state
-  // 2. build() is trigger when we use setState()
-  // 3. dispose() is called when state/ widget object is removed
+  final _contentController = TextEditingController();
+  final _amountController = TextEditingController();
+  final _messangerKey = GlobalKey<ScaffoldMessengerState>();
+
+  // Define states
+  String _content = '';
+  double _amount = 0;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -52,50 +58,45 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
   final emailEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    print('Run build()');
-    DateTime now = new DateTime.now();
     return MaterialApp(
       title: 'This is stateful widget',
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // Người dùng thay đổi giá trị thì là state
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                child: TextField(
-                  // Get value from text field
-                  controller: emailEditingController,
+        key: _messangerKey,
+        body: SafeArea(
+          minimum: const EdgeInsets.only(left: 20, right: 20),
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                // Người dùng thay đổi giá trị thì là state
+                TextField(
+                  decoration: InputDecoration(labelText: 'Content'),
+                  controller: _contentController,
                   onChanged: (text) {
-                    this.setState(() {
-                      _email =
-                          text; // When state change => build() rerun => reload widget
+                    setState(() {
+                      _content = text;
                     });
                   },
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderRadius: const BorderRadius.all(
-                        const Radius.circular(20),
-                      ),
-                    ),
-                    labelText: 'Enter you mail',
-                  ),
                 ),
-              ),
-              Text(
-                'This is email: ${_email}',
-                style: TextStyle(fontSize: 30, color: Colors.red),
-              ),
-              Text(
-                'Line 2: Name: ${widget.name} has age ${widget.age}',
-                style: TextStyle(fontSize: 30, color: Colors.blueAccent),
-              ),
-              Text(
-                DateFormat('yyyy/MM/dd').format(now),
-                style: TextStyle(fontSize: 30, color: Colors.green.shade900),
-              )
-            ],
+                TextField(
+                  decoration: InputDecoration(labelText: 'Amount(Money)'),
+                  controller: _amountController,
+                  onChanged: (text) {
+                    setState(() {
+                      _amount = double.tryParse(text) ?? 0;
+                    });
+                  },
+                ),
+                TextButton(
+                  child: Text('Insert Transaction'),
+                  style: TextButton.styleFrom(
+                      primary: Colors.red, backgroundColor: Colors.blue),
+                  onPressed: () {
+                    print('Content = $_content, money amount = $_amount');
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
