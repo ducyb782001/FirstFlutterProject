@@ -1,95 +1,42 @@
 // Bước 1: import thư viện material vào, thư viện này sẽ cung cấp widget để code
 import 'package:flutter/material.dart';
+import 'calculation.dart';
+import 'car.dart';
 
-// Bước 2: khai báo hàm main, đây là nơi mà code sẽ thực thi đầu tiên
+String s1 = 'How are you \n';
+String s2 = 'I\'m fine';
+var s3 = '$s1 - $s2'; // String concat
+int x = 10;
+List<int> numbers = [1, 2, 4, 6, 3, 5];
+
+List<String> stringNumbers = numbers.map((number) {
+  return 'value = $number';
+}).toList();
+
+List<String> numberTest = numbers.map((e) => 'value = $e').toList();
+
 void main() {
-  // Bước 3: gọi hàm runApp truyền vào 1 object MaterialApp
-  // MaterialApp chính là widget root, tổ tiên của 1 cây widget sau này
-  runApp(
-    MaterialApp(
-      // Bước 4: Trong constructor của MaterialApp có 1 property là `home`
-      // ta sử dụng property `home` này để code nội dung trong app
-      // ở đây mình truyền vào widget Text truyền vào 1 String
-      home: SafeArea(
-          child: Scaffold(
-              appBar: AppBar(
-                  backgroundColor: Colors.pink,
-                  title: const Text('Cua nang flutter')),
-              body: ColumnWidget())),
-    ),
-  );
-}
+  // for (int i = 0; i < numbers.length; i++) {
+  //   print(numbers[i]);
+  // }
+  // numbers.forEach((number) {
+  //   print(number)
+  // });
+  // var myCar = Car('Name', 2020);
 
-// Cách 2: extract ra class Widget riêng
-class ColumnWidget extends StatelessWidget {
-  const ColumnWidget({
-    Key? key,
-  }) : super(key: key);
+  // var myCar = Car(name: 'name', yearOrProduct: 2020);
+  // myCar.doSomeThing();
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text('Hi ban, cho minh lam quen nhe'),
-        Row(
-          children: [
-            FlatButton(
-              child: Text('red'),
-              color: Colors.red,
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('yellow'),
-              color: Colors.yellow,
-              onPressed: () {},
-            ),
-            FlatButton(
-              child: Text('green'),
-              color: Colors.green,
-              onPressed: () {},
-            )
-          ],
-        )
-      ],
-    );
-  }
-}
+  // List of cars
+  List<Car> cars = <Car>[]; // A blank list
+  cars.add(Car(name: 'BMW', yearOrProduct: 2019));
+  cars.add(Car(name: 'BMW'));
+  cars.add(Car(name: 'BMW', yearOrProduct: 2022));
+  print('Haha');
 
-// Cách 1: Extract Method
-Column buildColumn() {
-  return Column(
-    children: [
-      Text('Hi ban, cho minh lam quen nhe'),
-      Row(
-        children: [
-          FlatButton(
-            child: Text('red'),
-            color: Colors.red,
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text('yellow'),
-            color: Colors.yellow,
-            onPressed: () {},
-          ),
-          FlatButton(
-            child: Text('green'),
-            color: Colors.green,
-            onPressed: () {},
-          )
-        ],
-      )
-    ],
-  );
-}
-
-// Part 2:
-
-class CounterTextWidget extends StatelessWidget {
-  int counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text('Tui la widget text. Data cua tui la $counter');
-  }
+  runApp(Center(
+      child: Text('$s3 - $x',
+          style: TextStyle(fontSize: 30), // Style
+          textDirection: TextDirection.ltr) // left-to-right
+      ));
 }
