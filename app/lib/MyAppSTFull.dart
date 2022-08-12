@@ -66,60 +66,62 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
       home: Scaffold(
         body: SafeArea(
           minimum: const EdgeInsets.only(left: 20, right: 20),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                // Người dùng thay đổi giá trị thì là state
-                TextField(
-                  decoration: InputDecoration(labelText: 'Content'),
-                  controller: _contentController,
-                  onChanged: (text) {
-                    setState(() {
-                      _transaction.content = text;
-                    });
-                  },
-                ),
-                TextField(
-                  decoration: InputDecoration(labelText: 'Amount(Money)'),
-                  controller: _amountController,
-                  onChanged: (text) {
-                    setState(() {
-                      _transaction.amount = double.tryParse(text) ?? 0;
-                    });
-                  },
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                ),
-                ButtonTheme(
-                  height: 60,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      primary: Colors.red,
-                      backgroundColor: Colors.blue,
-                      textStyle: const TextStyle(fontSize: 20),
-                    ),
-                    onPressed: () {
-                      // print('Content = ${_transaction.content}, money amount = ${_transaction.amount}');
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: <Widget>[
+                  // Người dùng thay đổi giá trị thì là state
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Content'),
+                    controller: _contentController,
+                    onChanged: (text) {
                       setState(() {
-                        _transactions?.add(_transaction);
-                        _transaction = Transaction(amount: 0.0, content: '');
-                        _amountController.text = '';
-                        _contentController.text = '';
+                        _transaction.content = text;
                       });
-                      _messangerKey.currentState?.showSnackBar(SnackBar(
-                        content: Text('Content: ${_transactions.toString()}'),
-                        duration: const Duration(seconds: 4),
-                      ));
                     },
-                    child: const Text('Insert Transaction'),
                   ),
-                ),
-                TransactionList(
-                  transactions: _transactions,
-                ),
-              ],
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Amount(Money)'),
+                    controller: _amountController,
+                    onChanged: (text) {
+                      setState(() {
+                        _transaction.amount = double.tryParse(text) ?? 0;
+                      });
+                    },
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                  ),
+                  ButtonTheme(
+                    height: 60,
+                    child: TextButton(
+                      style: TextButton.styleFrom(
+                        primary: Colors.red,
+                        backgroundColor: Colors.blue,
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                      onPressed: () {
+                        // print('Content = ${_transaction.content}, money amount = ${_transaction.amount}');
+                        setState(() {
+                          _transactions?.add(_transaction);
+                          _transaction = Transaction(amount: 0.0, content: '');
+                          _amountController.text = '';
+                          _contentController.text = '';
+                        });
+                        _messangerKey.currentState?.showSnackBar(SnackBar(
+                          content: Text('Content: ${_transactions.toString()}'),
+                          duration: const Duration(seconds: 4),
+                        ));
+                      },
+                      child: const Text('Insert Transaction'),
+                    ),
+                  ),
+                  TransactionList(
+                    transactions: _transactions,
+                  ),
+                ],
+              ),
             ),
           ),
         ),
