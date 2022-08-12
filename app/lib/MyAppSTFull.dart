@@ -2,6 +2,8 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'Transaction.dart';
+import 'TransactionList.dart';
 
 // StatefulWidget: Has internal "state"
 // Khi state thay đổi thì hàm build reload => giao diện reload
@@ -26,8 +28,8 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
   final _messangerKey = GlobalKey<ScaffoldMessengerState>();
 
   // Define states
-  String _content = '';
-  double _amount = 0;
+  Transaction _transaction = Transaction(amount: 0.0, content: '');
+  List<Transaction>? _transactions = List<Transaction>.empty(growable: true);
 
   @override
   void initState() {
@@ -60,8 +62,8 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'This is stateful widget',
+      scaffoldMessengerKey: _messangerKey,
       home: Scaffold(
-        key: _messangerKey,
         body: SafeArea(
           minimum: const EdgeInsets.only(left: 20, right: 20),
           child: Center(
@@ -74,7 +76,7 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
                   controller: _contentController,
                   onChanged: (text) {
                     setState(() {
-                      _content = text;
+                      _transaction.content = text;
                     });
                   },
                 ),
@@ -83,17 +85,39 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
                   controller: _amountController,
                   onChanged: (text) {
                     setState(() {
-                      _amount = double.tryParse(text) ?? 0;
+                      _transaction.amount = double.tryParse(text) ?? 0;
                     });
                   },
                 ),
-                TextButton(
-                  child: Text('Insert Transaction'),
-                  style: TextButton.styleFrom(
-                      primary: Colors.red, backgroundColor: Colors.blue),
-                  onPressed: () {
-                    print('Content = $_content, money amount = $_amount');
-                  },
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                ),
+                ButtonTheme(
+                  height: 60,
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.red,
+                      backgroundColor: Colors.blue,
+                      textStyle: const TextStyle(fontSize: 20),
+                    ),
+                    onPressed: () {
+                      // print('Content = ${_transaction.content}, money amount = ${_transaction.amount}');
+                      setState(() {
+                        _transactions?.add(_transaction);
+                        _transaction = Transaction(amount: 0.0, content: '');
+                        _amountController.text = '';
+                        _contentController.text = '';
+                      });
+                      _messangerKey.currentState?.showSnackBar(SnackBar(
+                        content: Text('Content: ${_transactions.toString()}'),
+                        duration: const Duration(seconds: 4),
+                      ));
+                    },
+                    child: const Text('Insert Transaction'),
+                  ),
+                ),
+                TransactionList(
+                  transactions: _transactions,
                 ),
               ],
             ),
