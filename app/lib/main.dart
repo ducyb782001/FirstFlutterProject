@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'MyApp.dart';
 
 void main() {
-  runApp(MyAppStatefull(
-    age: 18,
-    name: 'Trung Duc dep trai',
+  runApp(MaterialApp(
+    title: 'Transaction App',
+    home: MyAppStatefull(
+      age: 18,
+      name: 'Trung Duc dep trai',
+    ),
   ));
 }
