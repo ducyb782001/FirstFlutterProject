@@ -56,6 +56,18 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
     }
   }
 
+  void _insertTransaction() {
+    if (_transaction.content.isEmpty ||
+        _transaction.amount == 0.0 ||
+        _transaction.amount.isNaN) {
+      return;
+    }
+    _transactions?.add(_transaction);
+    _transaction = Transaction(amount: 0.0, content: '');
+    _amountController.text = '';
+    _contentController.text = '';
+  }
+
   String _email = ''; // This is state
   final emailEditingController = TextEditingController();
   @override
@@ -64,6 +76,28 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
       title: 'This is stateful widget',
       scaffoldMessengerKey: _messangerKey,
       home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Transaction manager'),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                setState(() {
+                  _insertTransaction();
+                });
+              },
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          tooltip: 'Add transaction',
+          child: Icon(Icons.add),
+          onPressed: () {
+            setState(() {
+              _insertTransaction();
+            });
+          },
+        ),
         body: SafeArea(
           minimum: const EdgeInsets.only(left: 20, right: 20),
           child: SingleChildScrollView(
@@ -104,10 +138,7 @@ class _MyAppState extends State<MyAppStatefull> with WidgetsBindingObserver {
                       onPressed: () {
                         // print('Content = ${_transaction.content}, money amount = ${_transaction.amount}');
                         setState(() {
-                          _transactions?.add(_transaction);
-                          _transaction = Transaction(amount: 0.0, content: '');
-                          _amountController.text = '';
-                          _contentController.text = '';
+                          _insertTransaction();
                         });
                         _messangerKey.currentState?.showSnackBar(SnackBar(
                           content: Text('Content: ${_transactions.toString()}'),
